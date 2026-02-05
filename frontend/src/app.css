@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+body {
+    background-color: rgba(12, 15, 30, 0.5); /* color semitransparente */
+    backdrop-filter: blur(20px);
+}
