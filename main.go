@@ -16,7 +16,7 @@ var assets embed.FS
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
-	tasks := newTask()
+	tasks := NewTasks()
 	settings := NewSettings()
 	clock := NewClock(settings)
 	// Create application with options

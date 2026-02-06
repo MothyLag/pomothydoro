@@ -18,12 +18,32 @@ export function GetNextCycle() {
   return window['go']['main']['Clock']['GetNextCycle']();
 }
 
+export function GetNextCycleAndAdvance() {
+  return window['go']['main']['Clock']['GetNextCycleAndAdvance']();
+}
+
+export function GetRemainingMs(arg1) {
+  return window['go']['main']['Clock']['GetRemainingMs'](arg1);
+}
+
 export function GetSessions() {
   return window['go']['main']['Clock']['GetSessions']();
 }
 
 export function GetTime(arg1) {
   return window['go']['main']['Clock']['GetTime'](arg1);
+}
+
+export function IsPaused() {
+  return window['go']['main']['Clock']['IsPaused']();
+}
+
+export function PauseSession(arg1) {
+  return window['go']['main']['Clock']['PauseSession'](arg1);
+}
+
+export function ResumeSession(arg1) {
+  return window['go']['main']['Clock']['ResumeSession'](arg1);
 }
 
 export function StartSession(arg1) {

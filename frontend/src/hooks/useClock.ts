@@ -5,6 +5,10 @@ import {
     GetSessions,
     GetCurrentCycle,
     GetNewTime,
+    PauseSession,
+    ResumeSession,
+    GetRemainingMs,
+    GetNextCycleAndAdvance,
 } from "../../wailsjs/go/main/Clock";
 
 const stopSession = async () => {
@@ -32,6 +36,22 @@ const getNewTime = async (limitTime: number) => {
     return await GetNewTime(limitTime);
 };
 
+const pauseSession = async (limitTime: number) => {
+    return await PauseSession(limitTime);
+};
+
+const resumeSession = async (limitTime: number) => {
+    return await ResumeSession(limitTime);
+};
+
+const getRemainingMs = async (limitTime: number) => {
+    return await GetRemainingMs(limitTime);
+};
+
+const getNextCycleAndAdvance = async () => {
+    return await GetNextCycleAndAdvance();
+};
+
 export default () => {
     return {
         startSession,
@@ -40,5 +60,9 @@ export default () => {
         getSessions,
         getCurrentCycle,
         getNewTime,
+        pauseSession,
+        resumeSession,
+        getRemainingMs,
+        getNextCycleAndAdvance,
     };
 };

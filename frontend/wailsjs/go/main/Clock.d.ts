@@ -10,9 +10,19 @@ export function GetNewTime(arg1:number):Promise<string>;
 
 export function GetNextCycle():Promise<string>;
 
+export function GetNextCycleAndAdvance():Promise<string>;
+
+export function GetRemainingMs(arg1:number):Promise<number>;
+
 export function GetSessions():Promise<Array<main.Session>>;
 
 export function GetTime(arg1:number):Promise<string>;
+
+export function IsPaused():Promise<boolean>;
+
+export function PauseSession(arg1:number):Promise<string>;
+
+export function ResumeSession(arg1:number):Promise<void>;
 
 export function StartSession(arg1:string):Promise<number>;
 

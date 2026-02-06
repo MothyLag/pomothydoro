@@ -6,8 +6,10 @@ import (
 )
 
 type Clock struct {
-	Sessions       []Session
-	currentSession int8
+	Sessions        []Session
+	currentSession  int8
+	paused          bool
+	pausedRemaining time.Duration
 }
 
 var settings Settings
@@ -79,8 +81,31 @@ func (c *Clock) StopSession() string {
 		currSession := c.Sessions[c.currentSession]
 		currSession.End = endTime
 		c.Sessions[c.currentSession] = currSession
+		c.paused = false
 	}
 	return c.GetCurrentCycle()
+}
+
+func (c *Clock) PauseSession(limitTime int) string {
+	if c.currentSession >= 0 && !c.paused {
+		startTime := c.Sessions[c.currentSession].Start
+		elapsed := time.Since(startTime)
+		c.pausedRemaining = time.Duration(limitTime) - elapsed
+		c.paused = true
+	}
+	return c.GetTime(limitTime)
+}
+
+func (c *Clock) ResumeSession(limitTime int) {
+	if c.currentSession >= 0 && c.paused {
+		elapsed := time.Duration(limitTime) - c.pausedRemaining
+		c.Sessions[c.currentSession].Start = time.Now().Add(-elapsed)
+		c.paused = false
+	}
+}
+
+func (c *Clock) IsPaused() bool {
+	return c.paused
 }
 
 func itoa(n int) string {
@@ -134,8 +159,12 @@ func (c *Clock) GetNewTime(limitTime int) string {
 func (c *Clock) GetTime(limitTime int) string {
 	duration := time.Duration(limitTime)
 	if c.currentSession >= 0 {
-		startTime := c.Sessions[c.currentSession].Start
-		duration = time.Duration(limitTime) - time.Since(startTime)
+		if c.paused {
+			duration = c.pausedRemaining
+		} else {
+			startTime := c.Sessions[c.currentSession].Start
+			duration = time.Duration(limitTime) - time.Since(startTime)
+		}
 	}
 
 	min := (duration % time.Hour) / time.Minute
@@ -159,6 +188,29 @@ func (c *Clock) GetTime(limitTime int) string {
 		}
 	}
 	return minS + ":" + secS
+}
+
+func (c *Clock) GetRemainingMs(limitTime int) int {
+	if c.currentSession < 0 {
+		return limitTime / int(time.Millisecond)
+	}
+	if c.paused {
+		return int(c.pausedRemaining / time.Millisecond)
+	}
+	startTime := c.Sessions[c.currentSession].Start
+	remaining := time.Duration(limitTime) - time.Since(startTime)
+	return int(remaining / time.Millisecond)
+}
+
+func (c *Clock) GetNextCycleAndAdvance() string {
+	if c.currentSession >= 0 {
+		endTime := time.Now()
+		currSession := c.Sessions[c.currentSession]
+		currSession.End = endTime
+		c.Sessions[c.currentSession] = currSession
+		c.paused = false
+	}
+	return c.GetNextCycle()
 }
 
 func (c *Clock) GetSessions() []Session {

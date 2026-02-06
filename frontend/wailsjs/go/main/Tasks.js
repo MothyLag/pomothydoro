@@ -10,10 +10,22 @@ export function DeleteTask(arg1) {
   return window['go']['main']['Tasks']['DeleteTask'](arg1);
 }
 
-export function GetTask(arg1) {
-  return window['go']['main']['Tasks']['GetTask'](arg1);
+export function GetActiveTask() {
+  return window['go']['main']['Tasks']['GetActiveTask']();
 }
 
-export function UpdateTask(arg1, arg2) {
-  return window['go']['main']['Tasks']['UpdateTask'](arg1, arg2);
+export function GetTasks() {
+  return window['go']['main']['Tasks']['GetTasks']();
+}
+
+export function IncrementSession(arg1, arg2) {
+  return window['go']['main']['Tasks']['IncrementSession'](arg1, arg2);
+}
+
+export function SetActiveTask(arg1) {
+  return window['go']['main']['Tasks']['SetActiveTask'](arg1);
+}
+
+export function ToggleComplete(arg1) {
+  return window['go']['main']['Tasks']['ToggleComplete'](arg1);
 }
