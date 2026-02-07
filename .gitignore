@@ -3,3 +3,4 @@ package-lock.json
 bun.lock
 package.json.md5
 node_modules/
+dist/
