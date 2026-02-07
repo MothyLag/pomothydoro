@@ -4,3 +4,4 @@ bun.lock
 package.json.md5
 node_modules/
 dist/
+.claude/
