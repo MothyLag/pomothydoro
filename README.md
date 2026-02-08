@@ -1,7 +1,8 @@
 # Pomodoro
 
 A desktop Pomodoro timer app built with [Wails v2](https://wails.io/) (Go backend + React/TypeScript frontend). Features a translucent/acrylic window style for a modern look.
-
+## Download
+[Download](https://github.com/yourusername/pomodoro/releases/latest)
 ## Features
 
 - **Pomodoro Timer** — Click anywhere on the screen to start/stop the timer
