@@ -3,7 +3,15 @@ import useTasks from "../hooks/useTasks";
 import { main } from "../../wailsjs/go/models";
 
 export default () => {
-    const { getTasks, addTask, toggleComplete, deleteTask, setActiveTask, getActiveTask } = useTasks();
+    const {
+        getTasks,
+        addTask,
+        toggleComplete,
+        deleteTask,
+        setActiveTask,
+        getActiveTask,
+        saveTasks,
+    } = useTasks();
     const [tasks, setTasks] = useState<main.Task[]>([]);
     const [newTitle, setNewTitle] = useState("");
     const [activeTaskId, setActiveTaskId] = useState<number>(-1);
@@ -25,6 +33,10 @@ export default () => {
         await addTask(newTitle.trim());
         setNewTitle("");
         await fetchTasks();
+    };
+
+    const handleSaveTask = async () => {
+        await saveTasks();
     };
 
     const handleTaskClick = (e: any) => {
@@ -75,12 +87,22 @@ export default () => {
                                 }}
                                 className="accent-indigo-300"
                             />
-                            <span className={task.Completed ? "line-through opacity-50" : ""}>
+                            <span
+                                className={
+                                    task.Completed
+                                        ? "line-through opacity-50"
+                                        : ""
+                                }
+                            >
                                 {task.Title}
                             </span>
-                            {(task.WorkSessions > 0 || task.ShortRestSessions > 0 || task.LongRestSessions > 0) && (
+                            {(task.WorkSessions > 0 ||
+                                task.ShortRestSessions > 0 ||
+                                task.LongRestSessions > 0) && (
                                 <span className="text-white/40 text-[10px]">
-                                    {task.WorkSessions}w {task.ShortRestSessions}sr {task.LongRestSessions}lr
+                                    {task.WorkSessions}w{" "}
+                                    {task.ShortRestSessions}sr{" "}
+                                    {task.LongRestSessions}lr
                                 </span>
                             )}
                             <button
@@ -97,6 +119,13 @@ export default () => {
                     ))}
                 </ul>
             )}
+            <button
+                onClick={async () => {
+                    await saveTasks();
+                }}
+            >
+                Save
+            </button>
         </div>
     );
 };

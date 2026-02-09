@@ -1,9 +1,18 @@
 package main
 
+import (
+	"context"
+	"encoding/json"
+	"os"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+)
+
 type Tasks struct {
 	Tasks    []Task
 	nextId   int
 	ActiveId int
+	ctx      context.Context
 }
 
 type Task struct {
@@ -16,12 +25,16 @@ type Task struct {
 	Cycles            int
 }
 
-func NewTasks() *Tasks {
+func NewTasks(ctxt context.Context) *Tasks {
 	return &Tasks{
 		Tasks:    []Task{},
 		nextId:   1,
 		ActiveId: -1,
 	}
+}
+
+func (t *Tasks) startup(ctx context.Context) {
+	t.ctx = ctx
 }
 
 func (t *Tasks) AddTask(title string) Task {
@@ -55,6 +68,19 @@ func (t *Tasks) DeleteTask(id int) {
 			return
 		}
 	}
+}
+
+func (t *Tasks) SaveTasks() error {
+	dir, err := runtime.OpenDirectoryDialog(t.ctx, runtime.OpenDialogOptions{Title: "Select Directory"})
+	if err != nil {
+		return err
+	}
+	data, err := json.MarshalIndent(t, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(dir+"/mydata.json", data, 0644)
 }
 
 func (t *Tasks) SetActiveTask(id int) {

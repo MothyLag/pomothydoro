@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"embed"
 
 	"github.com/wailsapp/wails/v2"
@@ -13,10 +14,14 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+func propagateContext(ctx context.Context, app *App, t *Tasks) {
+	app.ctx = ctx
+	t.ctx = ctx
+}
 func main() {
 	// Create an instance of the app structure
 	app := NewApp()
-	tasks := NewTasks()
+	tasks := NewTasks(app.ctx)
 	settings := NewSettings()
 	clock := NewClock(settings)
 	// Create application with options
@@ -28,7 +33,9 @@ func main() {
 			Assets: assets,
 		},
 		BackgroundColour: &options.RGBA{R: 0, G: 0, B: 0, A: 0},
-		OnStartup:        app.startup,
+		OnStartup: func(ctx context.Context) {
+			propagateContext(ctx, app, tasks)
+		},
 		Windows: &windows.Options{
 			WindowIsTranslucent: true,
 			BackdropType:        windows.Acrylic,

@@ -12,6 +12,8 @@ export function GetTasks():Promise<Array<main.Task>>;
 
 export function IncrementSession(arg1:number,arg2:string):Promise<void>;
 
+export function SaveTasks():Promise<void>;
+
 export function SetActiveTask(arg1:number):Promise<void>;
 
 export function ToggleComplete(arg1:number):Promise<void>;

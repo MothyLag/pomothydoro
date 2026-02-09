@@ -6,6 +6,7 @@ import {
     SetActiveTask,
     GetActiveTask,
     IncrementSession,
+    SaveTasks,
 } from "../../wailsjs/go/main/Tasks";
 
 const addTask = async (title: string) => {
@@ -32,6 +33,10 @@ const getActiveTask = async () => {
     return await GetActiveTask();
 };
 
+const saveTasks = async () => {
+    return await SaveTasks();
+};
+
 const incrementSession = async (id: number, sessionType: string) => {
     return await IncrementSession(id, sessionType);
 };
@@ -45,5 +50,6 @@ export default () => {
         setActiveTask,
         getActiveTask,
         incrementSession,
+        saveTasks,
     };
 };

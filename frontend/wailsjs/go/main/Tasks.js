@@ -22,6 +22,10 @@ export function IncrementSession(arg1, arg2) {
   return window['go']['main']['Tasks']['IncrementSession'](arg1, arg2);
 }
 
+export function SaveTasks() {
+  return window['go']['main']['Tasks']['SaveTasks']();
+}
+
 export function SetActiveTask(arg1) {
   return window['go']['main']['Tasks']['SetActiveTask'](arg1);
 }
