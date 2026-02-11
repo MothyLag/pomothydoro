@@ -9,7 +9,7 @@ import {
     ResumeSession,
     GetRemainingMs,
     GetNextCycleAndAdvance,
-} from "../../wailsjs/go/main/Clock";
+} from "../../wailsjs/go/clock/Clock";
 
 const stopSession = async () => {
     StopSession();

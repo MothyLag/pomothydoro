@@ -7,7 +7,7 @@ import {
     GetActiveTask,
     IncrementSession,
     SaveTasks,
-} from "../../wailsjs/go/main/Tasks";
+} from "../../wailsjs/go/tasks/Tasks";
 
 const addTask = async (title: string) => {
     return await AddTask(title);

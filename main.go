@@ -3,6 +3,10 @@ package main
 import (
 	"context"
 	"embed"
+	"pomodoro/pkgs/app"
+	"pomodoro/pkgs/clock"
+	"pomodoro/pkgs/settings"
+	"pomodoro/pkgs/tasks"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -14,16 +18,16 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
-func propagateContext(ctx context.Context, app *App, t *Tasks) {
-	app.ctx = ctx
-	t.ctx = ctx
+func propagateContext(ctx context.Context, app *app.App, t *tasks.Tasks) {
+	app.Ctx = ctx
+	t.Ctx = ctx
 }
 func main() {
 	// Create an instance of the app structure
-	app := NewApp()
-	tasks := NewTasks(app.ctx)
-	settings := NewSettings()
-	clock := NewClock(settings)
+	app := app.NewApp()
+	tasks := tasks.NewTasks(app.Ctx)
+	settings := settings.NewSettings()
+	clock := clock.NewClock(settings)
 	// Create application with options
 	err := wails.Run(&options.App{
 		Title:  "pomodoro",
@@ -41,7 +45,7 @@ func main() {
 			BackdropType:        windows.Acrylic,
 		},
 		Linux: &linux.Options{
-			WindowIsTranslucent: true,
+			WindowIsTranslucent: false,
 		},
 		Bind: []any{
 			app,

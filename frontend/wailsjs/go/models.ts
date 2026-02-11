@@ -1,4 +1,4 @@
-export namespace main {
+export namespace clock {
 	
 	export class Session {
 	    ID: number;
@@ -38,6 +38,11 @@ export namespace main {
 		    return a;
 		}
 	}
+
+}
+
+export namespace settings {
+	
 	export class Settings {
 	    WorkSession: number;
 	    LongRestSession: number;
@@ -56,6 +61,11 @@ export namespace main {
 	        this.Cycle = source["Cycle"];
 	    }
 	}
+
+}
+
+export namespace tasks {
+	
 	export class Task {
 	    ID: number;
 	    Title: string;

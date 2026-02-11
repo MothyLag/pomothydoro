@@ -1,3 +1,4 @@
+import ClockBox from "./components/ClockBox";
 import Menu from "./components/Menu";
 import Clock from "./pages/Clock";
 

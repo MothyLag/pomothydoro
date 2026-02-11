@@ -11,11 +11,14 @@ const MIN_H = 150;
 export default (props: CustomPanelProps) => {
     const { children } = props;
     const panelRef = useRef<HTMLDivElement>(null);
-    const [position, setPosition] = useState({ x: 12, y: 100 });
+    const [position, setPosition] = useState({
+        x: 12,
+        y: window.innerHeight - 32,
+    });
     const [size, setSize] = useState({ w: 280, h: 400 });
     const [dragging, setDragging] = useState(false);
     const [resizing, setResizing] = useState(false);
-    const [minimized, setMinimized] = useState(false);
+    const [minimized, setMinimized] = useState(true);
     const [savedPosition, setSavedPosition] = useState({ x: 12, y: 100 });
     const dragOffset = useRef({ x: 0, y: 0 });
 
@@ -29,7 +32,7 @@ export default (props: CustomPanelProps) => {
             };
             setDragging(true);
         },
-        [position]
+        [position],
     );
 
     const handleResizeStart = useCallback((e: React.MouseEvent) => {
@@ -38,19 +41,22 @@ export default (props: CustomPanelProps) => {
         setResizing(true);
     }, []);
 
-    const toggleMinimize = useCallback((e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setMinimized((prev) => {
-            if (!prev) {
-                setSavedPosition(position);
-                setPosition({ x: 12, y: window.innerHeight - 32 });
-            } else {
-                setPosition(savedPosition);
-            }
-            return !prev;
-        });
-    }, [position, savedPosition]);
+    const toggleMinimize = useCallback(
+        (e: React.MouseEvent) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setMinimized((prev) => {
+                if (!prev) {
+                    setSavedPosition(position);
+                    setPosition({ x: 12, y: window.innerHeight - 32 });
+                } else {
+                    setPosition(savedPosition);
+                }
+                return !prev;
+            });
+        },
+        [position, savedPosition],
+    );
 
     useEffect(() => {
         const handleMouseMove = (e: MouseEvent) => {
@@ -102,7 +108,7 @@ export default (props: CustomPanelProps) => {
         >
             {/* Barra de titulo - arrastra desde aqui */}
             <div
-                className={`h-8 bg-indigo-700/80 flex items-center px-2 select-none justify-between ${minimized ? 'cursor-default' : 'cursor-move'}`}
+                className={`h-8 bg-indigo-700/80 flex items-center px-2 select-none justify-between ${minimized ? "cursor-default" : "cursor-move"}`}
                 onMouseDown={minimized ? undefined : handleDragStart}
             >
                 <span className="text-white text-xs font-semibold">Tasks</span>

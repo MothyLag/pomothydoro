@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useTasks from "../hooks/useTasks";
-import { main } from "../../wailsjs/go/models";
+import { tasks } from "../../wailsjs/go/models";
 
 export default () => {
     const {
@@ -12,7 +12,7 @@ export default () => {
         getActiveTask,
         saveTasks,
     } = useTasks();
-    const [tasks, setTasks] = useState<main.Task[]>([]);
+    const [tasks, setTasks] = useState<tasks.Task[]>([]);
     const [newTitle, setNewTitle] = useState("");
     const [activeTaskId, setActiveTaskId] = useState<number>(-1);
 

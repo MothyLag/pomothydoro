@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { main } from "../../wailsjs/go/models";
 import useClock from "../hooks/useClock";
 import useSettings from "../hooks/useSettings";
 import useTasks from "../hooks/useTasks";
-import { GetLimitTimeByDescription } from "../../wailsjs/go/main/Clock";
+import { GetLimitTimeByDescription } from "../../wailsjs/go/clock/Clock";
 import Tasks from "../components/Tasks";
 import CustomPanel from "../components/CustomPanel";
+import { clock, settings } from "../../wailsjs/go/models";
+import ClockBox from "../components/ClockBox";
 
 export default function Clock() {
     const {
@@ -21,16 +22,18 @@ export default function Clock() {
     } = useClock();
     const { getSettings } = useSettings();
     const { incrementSession, getActiveTask } = useTasks();
-    const [clockState, setClockState] = useState<'idle' | 'running' | 'paused'>('idle');
+    const [clockState, setClockState] = useState<"idle" | "running" | "paused">(
+        "idle",
+    );
     const [leftTime, setLeftTime] = useState<number>(0);
-    const [sessions, setSessions] = useState<main.Session[]>([]);
-    const [settings, setSettings] = useState<main.Settings>();
+    const [sessions, setSessions] = useState<clock.Session[]>([]);
+    const [settings, setSettings] = useState<settings.Settings>();
     const [currentCycle, setCurrentCycle] = useState<string>("");
     const [time, setTime] = useState("");
 
     // Timer polling: solo corre cuando clockState === 'running'
     useEffect(() => {
-        if (clockState !== 'running') return;
+        if (clockState !== "running") return;
 
         const interval = setInterval(async () => {
             const remainingMs = await getRemainingMs(leftTime);
@@ -51,7 +54,7 @@ export default function Clock() {
                 setLeftTime(nextLimit);
                 const nextTime = await getNewTime(nextLimit);
                 setTime(nextTime);
-                setClockState('idle');
+                setClockState("idle");
                 return;
             }
 
@@ -87,17 +90,17 @@ export default function Clock() {
         setCurrentCycle(currCyc);
         const remainingTime = await getTime(limitTime);
         setTime(remainingTime);
-        setClockState('running');
+        setClockState("running");
     };
 
     const handlePauseSession = async () => {
         await pauseSession(leftTime);
-        setClockState('paused');
+        setClockState("paused");
     };
 
     const handleResumeSession = async () => {
         await resumeSession(leftTime);
-        setClockState('running');
+        setClockState("running");
     };
 
     const handleSkipSession = async (e: React.MouseEvent) => {
@@ -115,7 +118,7 @@ export default function Clock() {
         setLeftTime(nextLimit);
         const nextTime = await getNewTime(nextLimit);
         setTime(nextTime);
-        setClockState('idle');
+        setClockState("idle");
     };
 
     return (
@@ -123,24 +126,35 @@ export default function Clock() {
             <div
                 className="h-full w-full text-white flex flex-col items-center justify-center cursor-pointer"
                 onClick={() => {
-                    if (clockState === 'idle') handleStartSession();
-                    else if (clockState === 'running') handlePauseSession();
+                    if (clockState === "idle") handleStartSession();
+                    else if (clockState === "running") handlePauseSession();
                     else handleResumeSession();
                 }}
             >
-                <h2 className="text-7xl font-extrabold">{currentCycle}</h2>
-                {clockState === 'paused' && (
-                    <span className="text-sm text-white/50">paused</span>
-                )}
-                <div className={`text-9xl font-bold ${clockState === 'paused' ? 'text-gray-400' : ''}`}>{time}</div>
-                {clockState !== 'idle' && (
-                    <button
-                        onClick={handleSkipSession}
-                        className="mt-4 text-white/50 hover:text-white text-sm px-4 py-1 rounded border border-white/20 hover:border-white/40"
-                    >
-                        Saltar sesion
-                    </button>
-                )}
+                <div
+                    className={`${clockState === "paused" ? "text-gray-400" : ""} w-full h-full grid grid-rows-3`}
+                >
+                    <div className="flex justify-center">
+                        {" "}
+                        {clockState === "paused" && (
+                            <span className="text-sm text-white/50">
+                                paused
+                            </span>
+                        )}
+                    </div>
+                    <ClockBox time={time} title={currentCycle} />
+                    <div className="flex justify-center">
+                        {" "}
+                        {clockState !== "idle" && (
+                            <button
+                                onClick={handleSkipSession}
+                                className="mt-4 text-white/50 hover:text-white text-sm px-4 py-1 rounded border border-white/20 hover:border-white/40"
+                            >
+                                Saltar sesion
+                            </button>
+                        )}
+                    </div>
+                </div>
             </div>
             <CustomPanel>
                 <Tasks />

@@ -1,4 +1,4 @@
-import { GetSettings } from "../../wailsjs/go/main/Settings";
+import { GetSettings } from "../../wailsjs/go/settings/Settings";
 const getSettings = async () => {
     const settings = await GetSettings();
     return settings;
